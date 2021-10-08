@@ -194,6 +194,7 @@ class Semiliterate:
             self,
             pattern,
             destination=None,
+            destination_directory=None,
             terminate=None,
             extract=[]):
         """Initialize semiliterate with pattern from configuration.
@@ -207,6 +208,7 @@ class Semiliterate:
         """
         self.file_filter = re.compile(pattern)
         self.destination = destination
+        self.destination_directory = destination_directory
         self.terminate = (terminate is not None) and re.compile(terminate)
         self.patterns = []
         if isinstance(extract, dict):
@@ -236,6 +238,9 @@ class Semiliterate:
 
         Returns True if extraction was successful.
         """
+        if self.destination_directory:
+            destination_directory = self.destination_directory
+
         to_file = self.filenname_match(from_file)
         if not to_file:
             return False
