@@ -193,6 +193,7 @@ class Semiliterate:
     def __init__(
             self,
             pattern,
+            directory_pattern=None,
             destination=None,
             destination_directory=None,
             terminate=None,
@@ -206,6 +207,8 @@ class Semiliterate:
             extract (ExtractionPattern): Extraction parameters.
 
         """
+        if directory_pattern:
+            self.directory_filter = re.compile(directory_pattern)
         self.file_filter = re.compile(pattern)
         self.destination = destination
         self.destination_directory = destination_directory
@@ -228,6 +231,13 @@ class Semiliterate:
             return new_name
         return None
 
+    def directory_match(self, name):
+        """Get the filename for the match, otherwise return None."""
+        name_match = self.directory_filter.search(name)
+        if name_match:
+            return True
+        return False
+
     def try_extraction(
             self,
             from_directory,
@@ -244,6 +254,8 @@ class Semiliterate:
 
         to_file = self.filenname_match(from_file)
         if not to_file:
+            return False
+        if self.directory_filter and not self.directory_match(from_directory):
             return False
         from_file_path = os.path.join(from_directory, from_file)
         try:
