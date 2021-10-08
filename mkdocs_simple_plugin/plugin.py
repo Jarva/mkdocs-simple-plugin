@@ -366,7 +366,7 @@ class SimplePlugin(BasePlugin):
                 document_root = self.build_docs_dir + root[1:]
                 for f in files:
                     copied = self.copy_file(root, f, document_root)
-                    extracted = self.extract_from(root, f, document_root)
+                    extracted = self.extract_from(root, f, document_root, self.build_docs_dir)
                     if copied or extracted:
                         paths.append(os.path.join(root, f))
             directories[:] = [d for d in directories
@@ -393,14 +393,14 @@ class SimplePlugin(BasePlugin):
                         e, original))
         return False
 
-    def extract_from(self, from_directory, name, destination_directory):
+    def extract_from(self, from_directory, name, destination_directory, build_docs_dir):
         """Extract content from file into destination.
 
         Returns the name of the file extracted if extractable.
         """
         extracted = False
         for item in self.semiliterate:
-            if item.try_extraction(from_directory, name, destination_directory):
+            if item.try_extraction(from_directory, name, destination_directory, build_docs_dir):
                 extracted = True
 
         return extracted

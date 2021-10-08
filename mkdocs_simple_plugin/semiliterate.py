@@ -233,13 +233,14 @@ class Semiliterate:
             from_directory,
             from_file,
             destination_directory,
+            build_docs_dir,
             **kwargs):
         """Try to extract documentation from file with name.
 
         Returns True if extraction was successful.
         """
         if self.destination_directory:
-            destination_directory = self.destination_directory
+            destination_directory = build_docs_dir + self.destination_directory
 
         to_file = self.filenname_match(from_file)
         if not to_file:
